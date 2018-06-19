@@ -9,6 +9,15 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView, ARRunningState } from 'expo-graphics';
 import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
+import feathers from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio/client';
+import io from 'socket.io-client';
+
+const host = 'http://localhost:3030';
+const socket = io(host, { transports: ['websocket']});
+const app = feathers();
+app.configure(socketio(socket));
+
 export default class App extends React.Component {
   componentDidMount() {
     // Turn off extra warnings
