@@ -7,9 +7,17 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 // expo-graphics manages the setup/teardown of the gl context/ar session, creates a frame-loop, and observes size/orientation changes.
 // it also provides debug information with `isArCameraStateEnabled`
 import { View as GraphicsView, ARRunningState } from 'expo-graphics';
-import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
+// import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
+
+import io from 'socket.io-client';
+
+const host = 'http://172.16.27.121:3030';
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.socket = io(host);
+  }
   componentDidMount() {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
@@ -23,20 +31,24 @@ export default class App extends React.Component {
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
     return (
-      <View
-        style={{flex: 1}}>
-      <GraphicsView
-        style={{ flex: 5 }}
-        onContextCreate={this.onContextCreate}
-        onRender={this.onRender}
-        onResize={this.onResize}
-        isArEnabled
-        // isArRunningStateEnabled
-        isArCameraStateEnabled
-        arTrackingConfiguration={AR.TrackingConfigurations.World} />
-      <View style={{flex: 1}}>
-      <Button style={{border: '1px solid black', zIndex: 1000}}title="shoot" onPress={this.showPosition} />
-      </View>
+      <View style={{ flex: 1 }}>
+        <GraphicsView
+          style={{ flex: 5 }}
+          onContextCreate={this.onContextCreate}
+          onRender={this.onRender}
+          onResize={this.onResize}
+          isArEnabled
+          // isArRunningStateEnabled
+          isArCameraStateEnabled
+          arTrackingConfiguration={AR.TrackingConfigurations.World}
+        />
+        <View style={{ flex: 1 }}>
+          <Button
+            style={{ border: '1px solid black', zIndex: 1000 }}
+            title="shoot"
+            onPress={this.showPosition}
+          />
+        </View>
       </View>
     );
   }
@@ -111,6 +123,8 @@ export default class App extends React.Component {
   showPosition = () => {
     let target = new THREE.Vector3();
     this.camera.getWorldPosition(target);
-    console.log(target);
+    console.log('emitting', target);
+    this.socket.emit('position', target);
+    console.log('=======================');
   };
 }
