@@ -121,10 +121,10 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
-    let target = new THREE.Vector3();
-    this.camera.getWorldPosition(target);
-    console.log('emitting', target);
-    this.socket.emit('position', target);
-    console.log('=======================');
+    let position = new THREE.Vector3();
+    let aim = new THREE.Vector3();
+    this.camera.getWorldPosition(position);
+    this.camera.getWorldDirection(aim);
+    this.socket.emit('position', {position, aim});
   };
 }

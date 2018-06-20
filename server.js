@@ -21,8 +21,9 @@ io.on('connection', socket => {
   console.log('A new client has connected!');
   console.log(socket.id);
 
-  socket.on('position', target => {
+  socket.on('position', ({position, aim}) => {
     console.log('Id: ', socket.id)
-    console.log('position: ', target);
+    console.log('position: ', position);
+    console.log('aim: ', aim);
   })
 })
