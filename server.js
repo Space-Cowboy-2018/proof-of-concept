@@ -22,6 +22,7 @@ io.on('connection', socket => {
   console.log(socket.id);
 
   socket.on('position', target => {
-    console.log(target);
+    console.log('Id: ', socket.id)
+    console.log('position: ', target);
   })
 })

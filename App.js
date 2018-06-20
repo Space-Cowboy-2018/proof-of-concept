@@ -11,12 +11,12 @@ import { View as GraphicsView, ARRunningState } from 'expo-graphics';
 
 import io from 'socket.io-client';
 
-const host = 'http://localhost:3030';
+const host = 'http://172.16.27.121:3030';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.socket = io(host, {transports: ['websocket']});
+    this.socket = io(host);
   }
   componentDidMount() {
     // Turn off extra warnings
@@ -125,5 +125,6 @@ export default class App extends React.Component {
     this.camera.getWorldPosition(target);
     console.log('emitting', target);
     this.socket.emit('position', target);
+    console.log('=======================');
   };
 }
