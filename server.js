@@ -25,5 +25,6 @@ io.on('connection', socket => {
     console.log('Id: ', socket.id)
     console.log('position: ', position);
     console.log('aim: ', aim);
+    socket.broadcast.emit('otherPosition', {position, aim});
   })
 })
